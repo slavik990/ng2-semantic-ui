@@ -6,7 +6,6 @@
 
 var enGB = {
     datepicker: {
-
         months: [
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
         ],
@@ -10127,7 +10126,7 @@ var bowser = createCommonjsModule(function (module) {
         default: return undefined
       }
     }
-
+    
     // OS version extraction
     var osVersion = '';
     if (result.windows) {
@@ -11864,7 +11863,7 @@ var ModalControls = (function () {
 var Modal = (function (_super) {
     __extends$18(Modal, _super);
     function Modal(controls, context) {
-        var _this =
+        var _this = 
         // Instances of `ModalControls` are only created in the `SuiModal` constructor,
         // so we take an initialised instance rather than remaking one each time.
         _super.call(this, controls.approve, controls.deny) || this;
@@ -13167,7 +13166,7 @@ var __metadata$37 = (undefined && undefined.__metadata) || function (k, v) {
 exports.SuiSelectOption = (function (_super) {
     __extends$21(SuiSelectOption, _super);
     function SuiSelectOption(renderer, element, changeDetector) {
-        var _this =
+        var _this = 
         // We inherit SuiDropdownMenuItem to automatically gain all keyboard navigation functionality.
         // This is not done via adding the .item class because it isn't supported by Angular.
         _super.call(this, renderer, element) || this;
@@ -14934,7 +14933,8 @@ var __metadata$45 = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 exports.SuiTabset = (function () {
-    function SuiTabset() {
+    function SuiTabset(changeDetector) {
+        this.changeDetector = changeDetector;
         this.tabs = [];
         this._barrierCount = 0;
     }
@@ -15029,6 +15029,7 @@ exports.SuiTabset = (function () {
             // Activate the closest tab to it.
             this.activateClosestTab(tab);
         }
+        this.changeDetector.markForCheck();
     };
     // Activate the first tab in the set.
     SuiTabset.prototype.activateFirstTab = function () {
@@ -15075,7 +15076,7 @@ exports.SuiTabset = __decorate$63([
         selector: "sui-tabset",
         template: "<ng-content></ng-content>"
     }),
-    __metadata$45("design:paramtypes", [])
+    __metadata$45("design:paramtypes", [_angular_core.ChangeDetectorRef])
 ], exports.SuiTabset);
 
 var __decorate$66 = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {

@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterContentInit } from "@angular/core";
+import { Component, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef } from "@angular/core";
 import { SuiTabHeader } from "../directives/tab-header";
 import { SuiTabContent } from "../directives/tab-content";
 import { Tab } from "../classes/tab";
@@ -34,7 +34,7 @@ export class SuiTabset implements AfterContentInit {
     // Keeps track of the number of times `internalComponentsUpdated` is called.
     private _barrierCount:number;
 
-    constructor() {
+    constructor(public changeDetector:ChangeDetectorRef) {
         this.tabs = [];
         this._barrierCount = 0;
     }
@@ -133,6 +133,8 @@ export class SuiTabset implements AfterContentInit {
             // Activate the closest tab to it.
             this.activateClosestTab(tab);
         }
+
+        this.changeDetector.markForCheck();
     }
 
     // Activate the first tab in the set.

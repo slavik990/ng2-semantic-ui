@@ -7,12 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ContentChildren, QueryList } from "@angular/core";
+import { Component, ContentChildren, QueryList, ChangeDetectorRef } from "@angular/core";
 import { SuiTabHeader } from "../directives/tab-header";
 import { SuiTabContent } from "../directives/tab-content";
 import { Tab } from "../classes/tab";
 var SuiTabset = (function () {
-    function SuiTabset() {
+    function SuiTabset(changeDetector) {
+        this.changeDetector = changeDetector;
         this.tabs = [];
         this._barrierCount = 0;
     }
@@ -107,6 +108,7 @@ var SuiTabset = (function () {
             // Activate the closest tab to it.
             this.activateClosestTab(tab);
         }
+        this.changeDetector.markForCheck();
     };
     // Activate the first tab in the set.
     SuiTabset.prototype.activateFirstTab = function () {
@@ -153,7 +155,7 @@ SuiTabset = __decorate([
         selector: "sui-tabset",
         template: "<ng-content></ng-content>"
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [ChangeDetectorRef])
 ], SuiTabset);
 export { SuiTabset };
 //# sourceMappingURL=tabset.js.map

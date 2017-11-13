@@ -1,0 +1,44 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+
+## ngc logs
+*.ngfactory.ts
+*.ngsummary.json
+
+# dependencies
+/node_modules
+/bower_components
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+.vscode
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log
+testem.log
+
+# system files
+.DS_Store
+Thumbs.db
+
+# non TS files
+*.d.ts
+*.metadata.json
+*.js
+*.js.map
+
+
+# output files
+demo/dist
+bundles
