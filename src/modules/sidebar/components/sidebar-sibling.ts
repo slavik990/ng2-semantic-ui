@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, HostListener, ElementRef, Renderer2 } from "@angular/core";
+import { Component, Input, HostBinding, HostListener, ElementRef, Renderer2, OnDestroy } from "@angular/core";
 import { SidebarService, SidebarTransition } from "../services/sidebar.service";
 
 @Component({
@@ -10,8 +10,9 @@ import { SidebarService, SidebarTransition } from "../services/sidebar.service";
 }
 `]
 })
-export class SuiSidebarSibling {
+export class SuiSidebarSibling implements OnDestroy {
     private _service:SidebarService;
+    private _documentClickListener:() => void;
 
     public get service():SidebarService {
         return this._service;
@@ -64,12 +65,28 @@ export class SuiSidebarSibling {
             this._renderer.setStyle(this._element.nativeElement, "transform", translate);
             this._renderer.setStyle(this._element.nativeElement, "-webkit-transform", translate);
         }
+
+        if (this.service.isVisible) {
+            this._documentClickListener = this._renderer.listen("document", "click", (e:MouseEvent) => this.onClick(e));
+        } else {
+            if (this._documentClickListener ) {
+                this._documentClickListener();
+            }
+        }
     }
 
-    @HostListener("click", ["$event"])
+
     public onClick(event:MouseEvent):void {
         if (this.service.isVisible && !this.service.wasJustOpened) {
             this.service.setVisibleState(false);
         }
     }
+
+    public ngOnDestroy():void {
+        if (this._documentClickListener ) {
+            this._documentClickListener();
+        }
+    }
+
+
 }

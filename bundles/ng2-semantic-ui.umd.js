@@ -14603,6 +14603,7 @@ exports.SuiSidebarSibling = (function () {
         configurable: true
     });
     SuiSidebarSibling.prototype.updateTransform = function () {
+        var _this = this;
         this._renderer.removeStyle(this._element.nativeElement, "transform");
         this._renderer.removeStyle(this._element.nativeElement, "-webkit-transform");
         if (this.service.isVisible &&
@@ -14612,10 +14613,23 @@ exports.SuiSidebarSibling = (function () {
             this._renderer.setStyle(this._element.nativeElement, "transform", translate);
             this._renderer.setStyle(this._element.nativeElement, "-webkit-transform", translate);
         }
+        if (this.service.isVisible) {
+            this._documentClickListener = this._renderer.listen("document", "click", function (e) { return _this.onClick(e); });
+        }
+        else {
+            if (this._documentClickListener) {
+                this._documentClickListener();
+            }
+        }
     };
     SuiSidebarSibling.prototype.onClick = function (event) {
         if (this.service.isVisible && !this.service.wasJustOpened) {
             this.service.setVisibleState(false);
+        }
+    };
+    SuiSidebarSibling.prototype.ngOnDestroy = function () {
+        if (this._documentClickListener) {
+            this._documentClickListener();
         }
     };
     return SuiSidebarSibling;
@@ -14638,12 +14652,6 @@ __decorate$61([
     _angular_core.HostBinding("class.pusher"),
     __metadata$44("design:type", Boolean)
 ], exports.SuiSidebarSibling.prototype, "_siblingClasses", void 0);
-__decorate$61([
-    _angular_core.HostListener("click", ["$event"]),
-    __metadata$44("design:type", Function),
-    __metadata$44("design:paramtypes", [MouseEvent]),
-    __metadata$44("design:returntype", void 0)
-], exports.SuiSidebarSibling.prototype, "onClick", null);
 exports.SuiSidebarSibling = __decorate$61([
     _angular_core.Component({
         selector: "sui-sidebar-sibling",

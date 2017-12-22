@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input, HostBinding, HostListener, ElementRef, Renderer2 } from "@angular/core";
+import { Component, Input, HostBinding, ElementRef, Renderer2 } from "@angular/core";
 import { SidebarTransition } from "../services/sidebar.service";
 var SuiSidebarSibling = (function () {
     function SuiSidebarSibling(_renderer, _element) {
@@ -50,6 +50,7 @@ var SuiSidebarSibling = (function () {
         configurable: true
     });
     SuiSidebarSibling.prototype.updateTransform = function () {
+        var _this = this;
         this._renderer.removeStyle(this._element.nativeElement, "transform");
         this._renderer.removeStyle(this._element.nativeElement, "-webkit-transform");
         if (this.service.isVisible &&
@@ -59,10 +60,23 @@ var SuiSidebarSibling = (function () {
             this._renderer.setStyle(this._element.nativeElement, "transform", translate);
             this._renderer.setStyle(this._element.nativeElement, "-webkit-transform", translate);
         }
+        if (this.service.isVisible) {
+            this._documentClickListener = this._renderer.listen("document", "click", function (e) { return _this.onClick(e); });
+        }
+        else {
+            if (this._documentClickListener) {
+                this._documentClickListener();
+            }
+        }
     };
     SuiSidebarSibling.prototype.onClick = function (event) {
         if (this.service.isVisible && !this.service.wasJustOpened) {
             this.service.setVisibleState(false);
+        }
+    };
+    SuiSidebarSibling.prototype.ngOnDestroy = function () {
+        if (this._documentClickListener) {
+            this._documentClickListener();
         }
     };
     return SuiSidebarSibling;
@@ -85,12 +99,6 @@ __decorate([
     HostBinding("class.pusher"),
     __metadata("design:type", Boolean)
 ], SuiSidebarSibling.prototype, "_siblingClasses", void 0);
-__decorate([
-    HostListener("click", ["$event"]),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [MouseEvent]),
-    __metadata("design:returntype", void 0)
-], SuiSidebarSibling.prototype, "onClick", null);
 SuiSidebarSibling = __decorate([
     Component({
         selector: "sui-sidebar-sibling",
