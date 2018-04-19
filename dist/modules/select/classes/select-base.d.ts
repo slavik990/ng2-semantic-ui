@@ -58,6 +58,7 @@ export declare abstract class SuiSelectBase<T, U> implements AfterContentInit, O
     protected queryUpdateHook(): void;
     protected updateQuery(query: string): void;
     protected resetQuery(delayed?: boolean): void;
+    private asyncEach(arr, func);
     protected onAvailableOptionsRendered(): void;
     protected initialiseRenderedOption(option: SuiSelectOption<T>): void;
     abstract selectOption(option: T): void;

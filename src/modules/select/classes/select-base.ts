@@ -10,6 +10,7 @@ import { ISelectLocaleValues, RecursivePartial, SuiLocalizationService } from ".
 import { SuiSelectOption } from "../components/select-option";
 import { SuiSelectSearch } from "../directives/select-search";
 
+
 export interface IOptionContext<T> extends ITemplateRefContext<T> {
     query?:string;
 }
@@ -299,16 +300,46 @@ export abstract class SuiSelectBase<T, U> implements AfterContentInit, OnDestroy
         }
     }
 
+    private asyncEach(arr:any, func:any):void {
+        let lastInd = 0;
+        const getNextLimit = (n:number) => {
+            if (arr.length < lastInd) {
+                return;
+            }
+            const count = arr.length < lastInd + n ? arr.length - lastInd : n;
+            let t = 0;
+
+
+            setTimeout(() => {
+                for (let i = 0; i < count; i++) {
+                    const el = arr[lastInd + i];
+                    func(el,  () => {
+                        t++;
+                        if (t === count) {
+                            lastInd += n;
+                            getNextLimit(20);
+                        }
+                    });
+                }
+
+            });
+        };
+
+        getNextLimit(20);
+
+    }
+
     protected onAvailableOptionsRendered():void {
         // Unsubscribe from all previous subscriptions to avoid memory leaks on large selects.
         this._renderedSubscriptions.forEach(rs => rs.unsubscribe());
         this._renderedSubscriptions = [];
 
-        this._renderedOptions.forEach(ro => {
+        this.asyncEach(this._renderedOptions.toArray(), (ro:any, cb:any) => {
             // Slightly delay initialisation to avoid change after checked errors. TODO - look into avoiding this!
-            setTimeout(() => this.initialiseRenderedOption(ro));
+            this.initialiseRenderedOption(ro);
 
             this._renderedSubscriptions.push(ro.onSelected.subscribe(() => this.selectOption(ro.value)));
+            cb();
         });
 
         // If no options have been provided, autogenerate them from the rendered ones.

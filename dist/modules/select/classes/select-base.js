@@ -277,15 +277,39 @@ var SuiSelectBase = (function () {
             this.searchInput.query = "";
         }
     };
+    SuiSelectBase.prototype.asyncEach = function (arr, func) {
+        var lastInd = 0;
+        var getNextLimit = function (n) {
+            if (arr.length < lastInd) {
+                return;
+            }
+            var count = arr.length < lastInd + n ? arr.length - lastInd : n;
+            var t = 0;
+            setTimeout(function () {
+                for (var i = 0; i < count; i++) {
+                    var el = arr[lastInd + i];
+                    func(el, function () {
+                        t++;
+                        if (t === count) {
+                            lastInd += n;
+                            getNextLimit(20);
+                        }
+                    });
+                }
+            });
+        };
+        getNextLimit(20);
+    };
     SuiSelectBase.prototype.onAvailableOptionsRendered = function () {
         var _this = this;
         // Unsubscribe from all previous subscriptions to avoid memory leaks on large selects.
         this._renderedSubscriptions.forEach(function (rs) { return rs.unsubscribe(); });
         this._renderedSubscriptions = [];
-        this._renderedOptions.forEach(function (ro) {
+        this.asyncEach(this._renderedOptions.toArray(), function (ro, cb) {
             // Slightly delay initialisation to avoid change after checked errors. TODO - look into avoiding this!
-            setTimeout(function () { return _this.initialiseRenderedOption(ro); });
+            _this.initialiseRenderedOption(ro);
             _this._renderedSubscriptions.push(ro.onSelected.subscribe(function () { return _this.selectOption(ro.value); }));
+            cb();
         });
         // If no options have been provided, autogenerate them from the rendered ones.
         if (this.searchService.options.length === 0 && !this.searchService.optionsLookup) {

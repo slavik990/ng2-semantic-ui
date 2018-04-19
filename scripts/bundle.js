@@ -22,7 +22,8 @@ const defaultPlugins = [
             "node_modules/date-fns/**",
             "node_modules/bowser/src/bowser.js",
             "node_modules/is-ua-webview/**",
-            "node_modules/extend/**"
+            "node_modules/extend/**",
+            "node_modules/async/dist/async.js"
         ]
     })
 ]
