@@ -1,5 +1,5 @@
 import { DatepickerMode } from "../components/datepicker";
-import { DateFnsParser } from "../helpers/date-fns";
+import { DateFnsParser } from "../helpers/date-fns-new";
 import { IDatepickerLocaleValues, IDatepickerFormatsLocaleValues } from "../../../behaviors/localization/index";
 
 export class DateParser {

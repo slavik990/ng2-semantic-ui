@@ -7,7 +7,7 @@ export * from "./components/datepicker";
 export * from "./directives/calendar-item";
 export * from "./directives/datepicker.directive";
 export * from "./directives/input.directive";
-export * from "./helpers/date-fns";
+export * from "./helpers/date-fns-new";
 export * from "./services/calendar-range.service";
 export * from "./services/calendar.service";
 export * from "./views/calendar-view";

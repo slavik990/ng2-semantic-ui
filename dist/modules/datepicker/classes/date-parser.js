@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { DateFnsParser } from "../helpers/date-fns";
+import { DateFnsParser } from "../helpers/date-fns-new";
 var DateParser = (function () {
     function DateParser(format, locale) {
         this._format = format;
